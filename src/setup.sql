@@ -51,3 +51,41 @@ INSERT INTO service_projects (organization_id, title, description, location, dat
 (3, 'Tech Workshop', 'Teaching digital skills to seniors', 'Community Library', '2026-07-15'),
 (3, 'Animal Shelter Help', 'Walking and caring for shelter animals', 'City Animal Shelter', '2026-08-01'),
 (3, 'Fundraiser Run', '5K run to raise money for local schools', 'City Stadium', '2026-08-20');
+
+
+-- ========================================
+-- Category Table
+-- ========================================
+CREATE TABLE category (
+    category_id SERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL
+);
+
+-- ========================================
+-- Project Category Junction Table
+-- ========================================
+CREATE TABLE project_category (
+    project_id INT NOT NULL,
+    category_id INT NOT NULL,
+    PRIMARY KEY (project_id, category_id),
+    FOREIGN KEY (project_id) REFERENCES service_projects(project_id),
+    FOREIGN KEY (category_id) REFERENCES category(category_id)
+);
+
+-- ========================================
+-- Insert sample data: Categories
+-- ========================================
+INSERT INTO category (name) VALUES
+('Community Outreach'),
+('Environmental'),
+('Education'),
+('Health & Wellness'),
+('Food Security');
+
+-- ========================================
+-- Insert sample data: Project Categories
+-- ========================================
+INSERT INTO project_category (project_id, category_id) VALUES
+(1, 5), (2, 2), (3, 3), (4, 1), (5, 4),
+(6, 1), (7, 1), (8, 2), (9, 3), (10, 2),
+(11, 5), (12, 2), (13, 3), (14, 1), (15, 4);
