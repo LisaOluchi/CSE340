@@ -3,15 +3,15 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './src/models/db.js';
-import { getAllProjects } from './src/models/projects.js';
-import { getAllCategories } from './src/models/categories.js';
+import { showProjectsPage, showProjectDetailsPage } from './src/controllers/projects.js';
+import { showOrganizationsPage, showOrganizationDetailsPage } from './src/controllers/organizations.js';
+import { showCategoriesPage, showCategoryDetailsPage } from './src/controllers/categories.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const app = express();
 
@@ -27,31 +27,13 @@ app.set('views', path.join(__dirname, 'src/views'));
 /**
  * Routes
  */
-app.get('/', async (req, res) => {
-    const title = 'Home';
-    res.render('home', { title });
-});
-
-app.get('/organizations', async (req, res) => {
-    const title = 'Our Partner Organizations';
-    res.render('organizations', { title });
-});
-
-app.get('/projects', async (req, res) => {
-    const projects = await getAllProjects();
-    res.render('projects', { 
-        title: 'Service Projects',
-        projects 
-    });
-});
-
-app.get('/categories', async (req, res) => {
-    const categories = await getAllCategories();
-    res.render('categories', { 
-        title: 'Categories',
-        categories 
-    });
-});
+app.get('/', (req, res) => res.render('home', { title: 'Home' }));
+app.get('/organizations', showOrganizationsPage);
+app.get('/organization/:id', showOrganizationDetailsPage);
+app.get('/projects', showProjectsPage);
+app.get('/project/:id', showProjectDetailsPage);
+app.get('/categories', showCategoriesPage);
+app.get('/category/:id', showCategoryDetailsPage);
 
 app.listen(PORT, async () => {
     try {
