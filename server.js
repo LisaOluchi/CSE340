@@ -35,6 +35,23 @@ app.get('/project/:id', showProjectDetailsPage);
 app.get('/categories', showCategoriesPage);
 app.get('/category/:id', showCategoryDetailsPage);
 
+// Catch-all 404 handler
+app.use((req, res, next) => {
+    const err = new Error('Page Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    res.status(status).render('error', {
+        title: 'Error',
+        message: status === 404 ? 'The page you requested does not exist.' : 'An unexpected error occurred.',
+        status
+    });
+});
+
 app.listen(PORT, async () => {
     try {
         await testConnection();
