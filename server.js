@@ -3,7 +3,7 @@ import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { testConnection } from './src/models/db.js';
-import { showProjectsPage, showProjectDetailsPage } from './src/controllers/projects.js';
+import { showProjectsPage, showProjectDetailsPage, showEditProjectForm, processEditProjectForm } from './src/controllers/projects.js';
 import { showOrganizationsPage, showOrganizationDetailsPage } from './src/controllers/organizations.js';
 import { showCategoriesPage, showCategoryDetailsPage } from './src/controllers/categories.js';
 
@@ -17,6 +17,24 @@ const app = express();
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Middleware to parse form data
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Middleware to log all requests
+app.use((req, res, next) => {
+    if (NODE_ENV === 'development') {
+        console.log(`${req.method} ${req.url}`);
+    }
+    next();
+});
+
+// Middleware to make NODE_ENV available to templates
+app.use((req, res, next) => {
+    res.locals.NODE_ENV = NODE_ENV;
+    next();
+});
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
@@ -32,6 +50,8 @@ app.get('/organizations', showOrganizationsPage);
 app.get('/organization/:id', showOrganizationDetailsPage);
 app.get('/projects', showProjectsPage);
 app.get('/project/:id', showProjectDetailsPage);
+app.get('/edit-project/:id', showEditProjectForm);
+app.post('/edit-project/:id', processEditProjectForm);
 app.get('/categories', showCategoriesPage);
 app.get('/category/:id', showCategoryDetailsPage);
 

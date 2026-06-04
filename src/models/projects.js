@@ -52,4 +52,20 @@ async function getProjectDetails(id) {
     return result.rows[0];
 }
 
-export { getAllProjects, getUpcomingProjects, getProjectDetails };
+async function updateProject(id, { title, description, location, date, organizationId }) {
+    const result = await db.query(
+        `UPDATE service_projects 
+         SET title = $1, description = $2, location = $3, date = $4, organization_id = $5 
+         WHERE project_id = $6
+         RETURNING *`,  
+        [title, description, location, date, organizationId, id]
+    );
+    
+    if (result.rowCount === 0) {
+        throw new Error('Project not found');
+    }
+    
+    return result.rows[0];
+}
+
+export { getAllProjects, getUpcomingProjects, getProjectDetails, updateProject };
