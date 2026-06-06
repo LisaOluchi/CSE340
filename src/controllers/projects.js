@@ -58,6 +58,7 @@ async function processEditProjectForm(req, res) {
     const { title, description, location, date, organizationId } = req.body;
     await updateProject(id, { title, description, location, date, organizationId });
     
+    req.flash('success', 'Project updated successfully!'); 
     res.redirect(`/project/${id}`);
 }
 

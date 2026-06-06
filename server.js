@@ -2,11 +2,13 @@ import 'dotenv/config';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import session from 'express-session';
+import flash from 'connect-flash';
 import { testConnection } from './src/models/db.js';
 import { showProjectsPage, showProjectDetailsPage, showEditProjectForm, processEditProjectForm } from './src/controllers/projects.js';
 import { showOrganizationsPage, showOrganizationDetailsPage } from './src/controllers/organizations.js';
-import { 
-    showCategoriesPage, 
+import {
+    showCategoriesPage,
     showCategoryDetailsPage,
     showNewCategoryForm,
     processNewCategoryForm,
@@ -29,6 +31,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.messages = req.flash();
+    next();
+});
 
 // Middleware to log all requests
 app.use((req, res, next) => {

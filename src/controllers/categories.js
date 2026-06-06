@@ -48,6 +48,8 @@ async function processNewCategoryForm(req, res) {
     const { name } = req.body;
     await createCategory(name);
 
+
+    req.flash('success', 'Category created successfully!');
     res.redirect('/categories');
 }
 
@@ -78,6 +80,8 @@ async function processEditCategoryForm(req, res) {
     const { name } = req.body;
     await updateCategory(id, name);
 
+
+    req.flash('success', 'Category updated successfully!');
     res.redirect('/categories');
 }
 

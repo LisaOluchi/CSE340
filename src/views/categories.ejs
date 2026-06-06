@@ -1,20 +1,28 @@
 <%- include('partials/header') %>
 
-<main>
-    <h1>Service Project Categories</h1>
-    
-    <p>
-        <a href="/new-category">Add New Category</a>
+  <% if (locals.messages && locals.messages.success && locals.messages.success.length> 0) { %>
+    <p class="flash-success">
+      <%= locals.messages.success[0] %>
     </p>
-    
-    <ul>
-      <% categories.forEach(category => { %>
-        <li>
-          <a href="/category/<%= category.category_id %>"><%= category.name %></a>
-          <a href="/edit-category/<%= category.category_id %>">Edit</a>
-        </li>
-      <% }) %>
-    </ul>
-</main>
+    <% } %>
 
-<%- include('partials/footer') %>
+      <main>
+        <h1>Service Project Categories</h1>
+
+        <p>
+          <a href="/new-category">Add New Category</a>
+        </p>
+
+        <ul>
+          <% categories.forEach(category=> { %>
+            <li>
+              <a href="/category/<%= category.category_id %>">
+                <%= category.name %>
+              </a>
+              <a href="/edit-category/<%= category.category_id %>">Edit</a>
+            </li>
+            <% }) %>
+        </ul>
+      </main>
+
+      <%- include('partials/footer') %>
