@@ -39,4 +39,33 @@ async function getProjectsByCategory(id) {
     return result.rows;
 }
 
-export { getAllCategories, getCategoryDetails, getCategoriesByProject, getProjectsByCategory };
+async function createCategory(name) {
+    const result = await db.query(
+        'INSERT INTO category (name) VALUES ($1) RETURNING category_id',
+        [name]
+    );
+    return result.rows[0].category_id;
+}
+
+async function getCategoryById(id) {
+    const result = await db.query(
+        'SELECT category_id, name FROM category WHERE category_id = $1',
+        [id]
+    );
+    return result.rows[0];
+}
+
+async function updateCategory(id, name) {
+    const result = await db.query(
+        'UPDATE category SET name = $1 WHERE category_id = $2 RETURNING *',
+        [name, id]
+    );
+
+    if (result.rowCount === 0) {
+        throw new Error('Category not found');
+    }
+
+    return result.rows[0];
+}
+
+export { getAllCategories, getCategoryDetails, getCategoriesByProject, getProjectsByCategory, createCategory, getCategoryById, updateCategory };

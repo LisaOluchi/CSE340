@@ -5,7 +5,15 @@ import path from 'path';
 import { testConnection } from './src/models/db.js';
 import { showProjectsPage, showProjectDetailsPage, showEditProjectForm, processEditProjectForm } from './src/controllers/projects.js';
 import { showOrganizationsPage, showOrganizationDetailsPage } from './src/controllers/organizations.js';
-import { showCategoriesPage, showCategoryDetailsPage } from './src/controllers/categories.js';
+import { 
+    showCategoriesPage, 
+    showCategoryDetailsPage,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm,
+    categoryValidation
+} from './src/controllers/categories.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -54,6 +62,10 @@ app.get('/edit-project/:id', showEditProjectForm);
 app.post('/edit-project/:id', processEditProjectForm);
 app.get('/categories', showCategoriesPage);
 app.get('/category/:id', showCategoryDetailsPage);
+app.get('/new-category', showNewCategoryForm);
+app.post('/new-category', categoryValidation, processNewCategoryForm);
+app.get('/edit-category/:id', showEditCategoryForm);
+app.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
 
 // Catch-all 404 handler
 app.use((req, res, next) => {

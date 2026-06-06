@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+
+<main>
+    <h1>Add New Category</h1>
+    
+    <% if (locals.errors && errors.length > 0) { %>
+        <div class="error-messages">
+            <% errors.forEach(error => { %>
+                <p class="error"><%= error.msg %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    
+    <form method="POST" action="/new-category">
+        <div>
+            <label for="name">Category Name:</label>
+            <input type="text" id="name" name="name" 
+                   value="<%= locals.formData?.name || '' %>"
+                   required maxlength="100">
+        </div>
+        
+        <button type="submit">Create Category</button>
+        <a href="/categories">Cancel</a>
+    </form>
+</main>
+
+<%- include('partials/footer') %>
