@@ -81,4 +81,4 @@ async function processEditCategoryForm(req, res) {
     res.redirect('/categories');
 }
 
-export { showCategoriesPage, showCategoryDetailsPage, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidation };
+export { showCategoriesPage, showCategoryDetailsPage, showNewCategoryForm, processNewCategoryForm, showEditCategoryForm, processEditCategoryForm, categoryValidation }; 
