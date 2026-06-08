@@ -28,4 +28,25 @@ async function getProjectsByOrganization(id) {
     return result.rows;
 }
 
-export { getAllOrganizations, getOrganizationDetails, getProjectsByOrganization };
+async function createOrganization(name, description, contact_email, logo_filename) {
+    const result = await db.query(
+        'INSERT INTO organization (name, description, contact_email, logo_filename) VALUES ($1, $2, $3, $4) RETURNING organization_id',
+        [name, description, contact_email, logo_filename]
+    );
+    return result.rows[0].organization_id;
+}
+
+async function updateOrganization(id, { name, description, contact_email, logo_filename }) {
+    const result = await db.query(
+        'UPDATE organization SET name = $1, description = $2, contact_email = $3, logo_filename = $4 WHERE organization_id = $5 RETURNING *',
+        [name, description, contact_email, logo_filename, id]
+    );
+    
+    if (result.rowCount === 0) {
+        throw new Error('Organization not found');
+    }
+    
+    return result.rows[0];
+}
+
+export { getAllOrganizations, getOrganizationDetails, getProjectsByOrganization, createOrganization, updateOrganization };

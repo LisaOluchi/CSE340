@@ -5,7 +5,15 @@ import path from 'path';
 import session from 'express-session';
 import flash from 'connect-flash';
 import { testConnection } from './src/models/db.js';
-import { showProjectsPage, showProjectDetailsPage, showEditProjectForm, processEditProjectForm } from './src/controllers/projects.js';
+import {
+    showProjectsPage,
+    showProjectDetailsPage,
+    showEditProjectForm,
+    processEditProjectForm,
+    showNewProjectForm,
+    processNewProjectForm,
+    projectValidation
+} from './src/controllers/projects.js';
 import { showOrganizationsPage, showOrganizationDetailsPage } from './src/controllers/organizations.js';
 import {
     showCategoriesPage,
@@ -16,6 +24,14 @@ import {
     processEditCategoryForm,
     categoryValidation
 } from './src/controllers/categories.js';
+
+import {
+    showNewOrganizationForm,
+    processNewOrganizationForm,
+    showEditOrganizationForm,
+    processEditOrganizationForm,
+    organizationValidation
+} from './src/controllers/organizations.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -76,12 +92,21 @@ app.get('/projects', showProjectsPage);
 app.get('/project/:id', showProjectDetailsPage);
 app.get('/edit-project/:id', showEditProjectForm);
 app.post('/edit-project/:id', processEditProjectForm);
+app.get('/new-project', showNewProjectForm);
+app.post('/new-project', projectValidation, processNewProjectForm);
 app.get('/categories', showCategoriesPage);
 app.get('/category/:id', showCategoryDetailsPage);
 app.get('/new-category', showNewCategoryForm);
 app.post('/new-category', categoryValidation, processNewCategoryForm);
 app.get('/edit-category/:id', showEditCategoryForm);
 app.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
+app.get('/new-organization', showNewOrganizationForm);
+app.post('/new-organization', organizationValidation, processNewOrganizationForm);
+app.get('/edit-organization/:id', showEditOrganizationForm);
+app.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
+app.get('/new-project', showNewProjectForm);
+app.post('/new-project', projectValidation, processNewProjectForm);
+
 
 // Catch-all 404 handler
 app.use((req, res, next) => {

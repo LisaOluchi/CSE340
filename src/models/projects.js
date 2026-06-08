@@ -68,4 +68,12 @@ async function updateProject(id, { title, description, location, date, organizat
     return result.rows[0];
 }
 
-export { getAllProjects, getUpcomingProjects, getProjectDetails, updateProject };
+async function createProject(title, description, location, date, organizationId) {
+    const result = await db.query(
+        'INSERT INTO service_projects (title, description, location, date, organization_id) VALUES ($1, $2, $3, $4, $5) RETURNING project_id',
+        [title, description, location, date, organizationId]
+    );
+    return result.rows[0].project_id;
+}
+
+export { getAllProjects, getUpcomingProjects, getProjectDetails, updateProject, createProject };

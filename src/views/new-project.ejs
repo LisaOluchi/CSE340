@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+
+<main>
+    <h1>Add New Service Project</h1>
+    
+    <% if (locals.errors && errors.length > 0) { %>
+        <div class="error-messages">
+            <% errors.forEach(error => { %>
+                <p class="error"><%= error.msg %></p>
+            <% }); %>
+        </div>
+    <% } %>
+    
+    <form method="POST" action="/new-project">
+        <div>
+            <label for="title">Project Title:</label>
+            <input type="text" id="title" name="title" 
+                   value="<%= locals.formData?.title || '' %>"
+                   required maxlength="150" minlength="3">
+        </div>
+        
+        <div>
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required><%= locals.formData?.description || '' %></textarea>
+        </div>
+        
+        <div>
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location"
+                   value="<%= locals.formData?.location || '' %>"
+                   required>
+        </div>
+        
+        <div>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date"
+                   value="<%= locals.formData?.date || '' %>"
+                   required>
+        </div>
+        
+        <div>
+            <label for="organizationId">Organization:</label>
+            <select id="organizationId" name="organizationId" required>
+                <option value="">-- Select Organization --</option>
+                <% organizations.forEach(org => { %>
+                    <option value="<%= org.organization_id %>"
+                            <% if (locals.formData?.organizationId == org.organization_id) { %>selected<% } %>>
+                        <%= org.name %>
+                    </option>
+                <% }); %>
+            </select>
+        </div>
+        
+        <button type="submit">Create Project</button>
+        <a href="/projects">Cancel</a>
+    </form>
+</main>
+
+<%- include('partials/footer') %>
