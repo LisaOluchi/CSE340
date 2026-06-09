@@ -32,6 +32,8 @@ import {
     processEditOrganizationForm,
     organizationValidation
 } from './src/controllers/organizations.js';
+import { showRegisterPage, processRegister, showLoginPage, processLogin, logout, registerValidation, loginValidation } from './src/controllers/users.js';
+
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -59,6 +61,20 @@ app.use(flash());
 
 app.use((req, res, next) => {
     res.locals.messages = req.flash();
+    next();
+});
+
+// Middleware to set res.locals variables for all templates
+app.use((req, res, next) => {
+    res.locals.isLoggedIn = false;
+    res.locals.user = null;
+    
+    if (req.session && req.session.user) {
+        res.locals.isLoggedIn = true;
+        res.locals.user = req.session.user;
+    }
+    
+    res.locals.NODE_ENV = NODE_ENV;
     next();
 });
 
@@ -106,6 +122,11 @@ app.get('/edit-organization/:id', showEditOrganizationForm);
 app.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
 app.get('/new-project', showNewProjectForm);
 app.post('/new-project', projectValidation, processNewProjectForm);
+app.get('/register', showRegisterPage);
+app.post('/register', registerValidation, processRegister);
+app.get('/login', showLoginPage);
+app.post('/login', loginValidation, processLogin);
+app.get('/logout', logout);
 
 
 // Catch-all 404 handler

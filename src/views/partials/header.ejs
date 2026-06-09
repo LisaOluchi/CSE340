@@ -17,18 +17,30 @@
             <li><a href="/organizations">Organizations</a></li>
             <li><a href="/projects">Projects</a></li>
             <li><a href="/categories">Categories</a></li>
+
+            <% if (isLoggedIn) { %>
+                <li><span>Hello, <%= user.email %></span></li>
+                <li><a href="/logout">Logout</a></li>
+                <% } else { %>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                    <% } %>
         </ul>
     </nav>
 
-<% if (locals.messages) { %>
-    <% if (messages.success) { %>
-        <% messages.success.forEach(msg => { %>
-            <p class="flash-success"><%= msg %></p>
-        <% }) %>
-    <% } %>
-    <% if (messages.error) { %>
-        <% messages.error.forEach(msg => { %>
-            <p class="flash-error"><%= msg %></p>
-        <% }) %>
-    <% } %>
-<% } %>
+    <% if (locals.messages) { %>
+        <% if (messages.success) { %>
+            <% messages.success.forEach(msg=> { %>
+                <p class="flash-success">
+                    <%= msg %>
+                </p>
+                <% }) %>
+                    <% } %>
+                        <% if (messages.error) { %>
+                            <% messages.error.forEach(msg=> { %>
+                                <p class="flash-error">
+                                    <%= msg %>
+                                </p>
+                                <% }) %>
+                                    <% } %>
+                                        <% } %>
