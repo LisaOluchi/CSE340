@@ -1,11 +1,14 @@
 <%- include('partials/header') %>
 
-  <main>
+<main>
     <h1>Upcoming Service Projects</h1>
 
-    <p>
-      <a href="/new-project">Add New Project</a>
-    </p>
+    <% if (user && user.role_name === 'admin') { %>
+        <p>
+            <a href="/new-project">Add New Project</a>
+        </p>
+    <% } %>
+    
     <ul>
       <% projects.forEach(project=> { %>
         <li>
@@ -18,6 +21,6 @@
         </li>
         <% }) %>
     </ul>
-  </main>
+</main>
 
-  <%- include('partials/footer') %>
+<%- include('partials/footer') %>

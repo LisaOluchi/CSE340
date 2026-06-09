@@ -2,16 +2,23 @@
 
 <main>
     <h1>Our Partner Organizations</h1>
-    <p>
-    <a href="/new-organization">Add New Organization</a>
-</p>
+    
+    <% if (user && user.role_name === 'admin') { %>
+        <p>
+            <a href="/new-organization">Add New Organization</a>
+        </p>
+    <% } %>
+    
     <ul>
       <% organizations.forEach(org => { %>
         <li>
           <img src="/images/<%= org.logo_filename %>" alt="<%= org.name %> logo" style="width: 100px; height: auto; margin-bottom: 10px;">
           <br>
           <a href="/organization/<%= org.organization_id %>"><%= org.name %></a>
-          <a href="/edit-organization/<%= org.organization_id %>">Edit</a>
+          
+          <% if (user && user.role_name === 'admin') { %>
+              <a href="/edit-organization/<%= org.organization_id %>">Edit</a>
+          <% } %>
         </li>
       <% }) %>
     </ul>

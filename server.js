@@ -32,8 +32,7 @@ import {
     processEditOrganizationForm,
     organizationValidation
 } from './src/controllers/organizations.js';
-import { showRegisterPage, processRegister, showLoginPage, processLogin, logout, registerValidation, loginValidation } from './src/controllers/users.js';
-
+import { showRegisterPage, processRegister, showLoginPage, processLogin, logout, registerValidation, loginValidation, requireRole } from './src/controllers/users.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -101,32 +100,37 @@ app.set('views', path.join(__dirname, 'src/views'));
 /**
  * Routes
  */
+// PUBLIC ROUTES (no protection needed)
 app.get('/', (req, res) => res.render('home', { title: 'Home' }));
 app.get('/organizations', showOrganizationsPage);
 app.get('/organization/:id', showOrganizationDetailsPage);
 app.get('/projects', showProjectsPage);
 app.get('/project/:id', showProjectDetailsPage);
-app.get('/edit-project/:id', showEditProjectForm);
-app.post('/edit-project/:id', processEditProjectForm);
-app.get('/new-project', showNewProjectForm);
-app.post('/new-project', projectValidation, processNewProjectForm);
 app.get('/categories', showCategoriesPage);
 app.get('/category/:id', showCategoryDetailsPage);
-app.get('/new-category', showNewCategoryForm);
-app.post('/new-category', categoryValidation, processNewCategoryForm);
-app.get('/edit-category/:id', showEditCategoryForm);
-app.post('/edit-category/:id', categoryValidation, processEditCategoryForm);
-app.get('/new-organization', showNewOrganizationForm);
-app.post('/new-organization', organizationValidation, processNewOrganizationForm);
-app.get('/edit-organization/:id', showEditOrganizationForm);
-app.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
-app.get('/new-project', showNewProjectForm);
-app.post('/new-project', projectValidation, processNewProjectForm);
+
+// AUTHENTICATION ROUTES
 app.get('/register', showRegisterPage);
 app.post('/register', registerValidation, processRegister);
 app.get('/login', showLoginPage);
 app.post('/login', loginValidation, processLogin);
 app.get('/logout', logout);
+
+// ADMIN-ONLY ROUTES (protected)
+app.get('/new-organization', requireRole('admin'), showNewOrganizationForm);
+app.post('/new-organization', requireRole('admin'), organizationValidation, processNewOrganizationForm);
+app.get('/edit-organization/:id', requireRole('admin'), showEditOrganizationForm);
+app.post('/edit-organization/:id', requireRole('admin'), organizationValidation, processEditOrganizationForm);
+
+app.get('/new-project', requireRole('admin'), showNewProjectForm);
+app.post('/new-project', requireRole('admin'), projectValidation, processNewProjectForm);
+app.get('/edit-project/:id', requireRole('admin'), showEditProjectForm);
+app.post('/edit-project/:id', requireRole('admin'), projectValidation, processEditProjectForm);
+
+app.get('/new-category', requireRole('admin'), showNewCategoryForm);
+app.post('/new-category', requireRole('admin'), categoryValidation, processNewCategoryForm);
+app.get('/edit-category/:id', requireRole('admin'), showEditCategoryForm);
+app.post('/edit-category/:id', requireRole('admin'), categoryValidation, processEditCategoryForm);
 
 
 // Catch-all 404 handler
