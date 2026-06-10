@@ -1,5 +1,6 @@
 import { createUser, findUserByEmail, verifyPassword } from '../models/users.js';
 import { body, validationResult } from 'express-validator';
+import { getAllUsers } from '../models/users.js';
 
 const registerValidation = [
     body('email')
@@ -145,4 +146,18 @@ function logout(req, res) {
     });
 }
 
-export { showRegisterPage, processRegister, showLoginPage, processLogin, logout, registerValidation, loginValidation, requireRole };
+async function showUsersPage(req, res) {
+    try {
+        const users = await getAllUsers();
+        res.render('users', {
+            title: 'Registered Users',
+            users
+        });
+    } catch (error) {
+        console.error('Error fetching users:', error);
+        req.flash('error', 'Error loading users page');
+        res.redirect('/');
+    }
+}
+
+export { showRegisterPage, processRegister, showLoginPage, processLogin, logout, registerValidation, loginValidation, requireRole, showUsersPage };

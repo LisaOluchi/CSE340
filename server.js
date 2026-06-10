@@ -32,7 +32,7 @@ import {
     processEditOrganizationForm,
     organizationValidation
 } from './src/controllers/organizations.js';
-import { showRegisterPage, processRegister, showLoginPage, processLogin, logout, registerValidation, loginValidation, requireRole } from './src/controllers/users.js';
+import { showRegisterPage, processRegister, showLoginPage, processLogin, logout, registerValidation, loginValidation, requireRole,showUsersPage  } from './src/controllers/users.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -131,6 +131,9 @@ app.get('/new-category', requireRole('admin'), showNewCategoryForm);
 app.post('/new-category', requireRole('admin'), categoryValidation, processNewCategoryForm);
 app.get('/edit-category/:id', requireRole('admin'), showEditCategoryForm);
 app.post('/edit-category/:id', requireRole('admin'), categoryValidation, processEditCategoryForm);
+
+// Users page (admin only)
+app.get('/users', requireRole('admin'), showUsersPage);
 
 
 // Catch-all 404 handler

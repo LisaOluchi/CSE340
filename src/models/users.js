@@ -27,5 +27,15 @@ async function findUserByEmail(email) {
 async function verifyPassword(plainPassword, hashedPassword) {
     return await bcrypt.compare(plainPassword, hashedPassword);
 }
+async function getAllUsers() {
+    const query = `
+        SELECT u.user_id, u.email, r.role_name 
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        ORDER BY u.email ASC
+    `;
+    const result = await db.query(query);
+    return result.rows;
+}
 
-export { createUser, findUserByEmail, verifyPassword };
+export { createUser, findUserByEmail, verifyPassword, getAllUsers };
