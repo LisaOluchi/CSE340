@@ -89,3 +89,17 @@ INSERT INTO project_category (project_id, category_id) VALUES
 (1, 5), (2, 2), (3, 3), (4, 1), (5, 4),
 (6, 1), (7, 1), (8, 2), (9, 3), (10, 2),
 (11, 5), (12, 2), (13, 3), (14, 1), (15, 4);
+
+-- Create volunteer table (many-to-many between users and projects)
+CREATE TABLE user_volunteers (
+    volunteer_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    project_id INTEGER NOT NULL,
+    volunteered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES service_projects(project_id) ON DELETE CASCADE,
+    UNIQUE(user_id, project_id)
+);
+
+-- Verify
+SELECT * FROM user_volunteers;

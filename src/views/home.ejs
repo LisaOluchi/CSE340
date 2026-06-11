@@ -1,19 +1,46 @@
 <%- include('partials/header') %>
 
-<main>
-    <h1><%= title %></h1>
+    <main>
+        <h1>
+            <%= title %>
+        </h1>
 
-    <h2>Welcome to the CSE 340 Service Network!</h2>
-    <p>Our mission is to promote service across the world by connecting volunteers with service opportunities in their community.</p>
+        <h2>Welcome to the CSE 340 Service Network!</h2>
+        <p>Our mission is to promote service across the world by connecting volunteers with service opportunities in
+            their community.</p>
 
-    <% if (user && user.role_name === 'admin') { %>
-        <p>
-            <a href="/users">View All Users</a>
-        </p>
-    <% } %>
+        <% if (user && user.role_name==='admin' ) { %>
+            <p>
+                <a href="/users">View All Users</a>
+            </p>
+            <% } %>
 
-    <img class='main-logo' src='images/cse340-service-network.png' alt='CSE 340 Service Network Logo'>
+                <% if (isLoggedIn) { %>
+                    <h2>My Volunteered Projects</h2>
+                    <% if (volunteeredProjects && volunteeredProjects.length> 0) { %>
+                        <ul>
+                            <% volunteeredProjects.forEach(project=> { %>
+                                <li>
+                                    <a href="/project/<%= project.project_id %>">
+                                        <%= project.title %>
+                                    </a>
+                                    (<%= project.organization_name %>)
+                                        <form method="POST" action="/unvolunteer/<%= project.project_id %>"
+                                            style="display: inline;">
+                                            <button type="submit">Remove</button>
+                                        </form>
+                                </li>
+                                <% }); %>
+                        </ul>
+                        <% } else { %>
+                            <p>You have not volunteered for any projects yet.</p>
+                            <% } %>
+                                <% } %>
 
-</main>
 
-<%- include('partials/footer') %>
+
+                                    <img class='main-logo' src='images/cse340-service-network.png'
+                                        alt='CSE 340 Service Network Logo'>
+
+    </main>
+    <%- include('partials/footer') %>

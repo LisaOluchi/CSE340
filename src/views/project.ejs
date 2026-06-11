@@ -9,15 +9,35 @@
         <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>
     </p>
     
-    <p>
-        <a href="/edit-project/<%= project.project_id %>">Edit Project</a>
-    </p>
+    <% if (user && user.role_name === 'admin') { %>
+        <p>
+            <a href="/edit-project/<%= project.project_id %>">Edit Project</a>
+        </p>
+    <% } %>
     
     <p><strong>Categories:</strong>
       <% categories.forEach(category => { %>
         <a href="/category/<%= category.category_id %>"><%= category.name %></a>
       <% }) %>
     </p>
+    
+    <!-- VOLUNTEER part ↓ -->
+    <% if (isLoggedIn) { %>
+        <hr>
+        <% if (isVolunteered) { %>
+            <p><strong style="color: green;">✓ You are volunteering for this project</strong></p>
+            <form method="POST" action="/unvolunteer/<%= project.project_id %>" style="display: inline;">
+                <button type="submit">Remove Myself as Volunteer</button>
+            </form>
+        <% } else { %>
+            <form method="POST" action="/volunteer/<%= project.project_id %>" style="display: inline;">
+                <button type="submit">Volunteer for This Project</button>
+            </form>
+        <% } %>
+    <% } else { %>
+        <p><a href="/login">Log in to volunteer for this project</a></p>
+    <% } %>
+    <!-- VOLUNTEER part ↑ -->
 </main>
 
 <%- include('partials/footer') %>
